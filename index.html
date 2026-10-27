@@ -47,6 +47,7 @@ padding:.35em .8em;border:3px solid #000;box-shadow:5px 5px 0 var(--lime);transf
 .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 .kind{font:400 1.5rem/1 var(--display);background:var(--lime);color:var(--ink);padding:.3em .7em;border:3px solid #000;box-shadow:4px 4px 0 var(--purple);transform:rotate(1.5deg);letter-spacing:.04em}
 .count{font-weight:700}
+.streak{font:400 1.5rem/1 var(--display);letter-spacing:.04em;background:var(--purple);color:#fff;padding:.3em .7em;border:3px solid #000;box-shadow:4px 4px 0 var(--lime);transform:rotate(-1.5deg)}
 .q{font:400 clamp(2.4rem,8vw,5rem)/1 var(--display);text-align:center;margin:10px 0 28px;letter-spacing:.02em;text-wrap:balance}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .opt{position:relative;cursor:pointer;border:4px solid #000;padding:clamp(18px,4vw,34px) 18px;min-height:170px;display:flex;align-items:center;justify-content:center;
@@ -84,6 +85,35 @@ h2{font:400 clamp(2.4rem,7vw,4.2rem)/1 var(--display);color:var(--lime);letter-s
 .links a:nth-child(even):hover{box-shadow:8px 8px 0 var(--lime)}
 footer{padding:30px 0 50px;text-align:center;opacity:.75;font-weight:700}
 
+
+.tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.tab{font:400 1.2rem/1 var(--display);letter-spacing:.04em;padding:.5em .8em;border:3px solid #000;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--purple)}
+.tab.on{background:var(--lime);transform:rotate(-1.5deg)}
+.gpick{position:relative;display:inline-block;margin-bottom:18px}
+#gbtn{font-size:1.7rem}
+.gmenu{position:absolute;z-index:20;left:0;top:calc(100% + 8px);min-width:min(320px,86vw);background:var(--paper);border:4px solid #000;box-shadow:7px 7px 0 var(--purple);padding:8px;display:grid;gap:6px}
+.gmenu[hidden]{display:none}
+.gmenu .tab{font-size:1.4rem;text-align:left;padding:.6em .8em;box-shadow:none;transform:none;background:#fff}
+.gmenu .tab:hover,.gmenu .tab.on{background:var(--lime);transform:none}
+.opts.sm .opt{min-height:80px;font-size:clamp(1.3rem,4vw,2rem)}
+.timer{font:400 2.4rem/1 var(--display);color:var(--lime);text-align:center;margin-bottom:6px}
+.emo{font:400 clamp(3rem,13vw,7rem)/1.1 var(--display);text-align:center;margin:10px 0 18px;letter-spacing:.08em;word-break:break-all}
+.in{display:block;width:100%;max-width:460px;margin:0 auto 14px;font:700 1.4rem var(--body);padding:.6em .8em;border:4px solid #000;background:var(--paper);color:var(--ink);box-shadow:5px 5px 0 var(--purple);text-align:center}
+.rng{display:block;width:100%;max-width:520px;margin:10px auto 18px;accent-color:var(--lime)}
+.big{font:400 clamp(3rem,10vw,5.5rem)/1 var(--display);color:var(--lime);text-align:center;text-shadow:4px 4px 0 var(--purple)}
+.res{text-align:center;padding:10px 0}.res p{margin:8px 0 18px}
+.wg{display:grid;gap:8px;justify-content:center;margin-bottom:16px}.wr{display:flex;gap:8px}
+.wc{width:clamp(46px,14vw,62px);height:clamp(46px,14vw,62px);display:grid;place-items:center;font:400 2rem var(--display);border:3px solid #000}
+.wc.ok{background:var(--lime);color:var(--ink)}.wc.mv{background:var(--purple);color:#fff}.wc.no{background:#2a2a2a;color:#aaa}
+.cg{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;max-width:460px;margin:0 auto 20px}
+.cg div{aspect-ratio:1;display:grid;place-items:center;font:400 clamp(1rem,4.5vw,1.8rem) var(--display);color:var(--ink)}
+.cg .cl{color:var(--purple);font-size:clamp(1rem,4vw,1.5rem)}
+.cg .on{background:var(--lime);border:3px solid #000}.cg .mys{background:var(--purple);color:#fff}
+.crow{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.crow b{font:400 1.5rem var(--display);color:var(--lime);min-width:2.2em}.crow span{flex:1;min-width:180px}
+.crow input{width:130px;font:700 1.1rem var(--body);padding:.4em;border:3px solid #000;text-transform:uppercase;text-align:center}
+#lb{list-style:none;padding:0;margin:0}#lb li{display:flex;justify-content:space-between;gap:10px;padding:.5em 0;border-bottom:2px dashed #000;counter-increment:r}
+#lb li::before{content:counter(r) ".";font-weight:700;min-width:1.8em}#lb li b{flex:1}#lb{counter-reset:r}
 @media(max-width:620px){
  .opts{grid-template-columns:1fr}
  .opt{min-height:120px}
@@ -106,18 +136,21 @@ footer{padding:30px 0 50px;text-align:center;opacity:.75;font-weight:700}
 </header>
 
 <main>
-<section class="game wrap" aria-labelledby="qtext">
+<section class="game wrap" id="play" aria-label="Games">
+  <div class="gpick"><button class="btn go" id="gbtn" type="button" aria-expanded="false" aria-controls="gmenu"></button><div class="gmenu" id="gmenu" hidden></div></div>
   <div class="bar">
-    <span class="kind" id="kind"></span>
+    <span class="streak" id="streak"></span>
     <span class="count" id="count"></span>
   </div>
-  <h2 class="q" id="qtext" style="text-shadow:none;color:var(--paper)" aria-live="polite"></h2>
-  <div class="opts">
-    <button class="opt a" id="optA" type="button"></button>
-    <button class="opt b" id="optB" type="button"></button>
+  <div id="stage"></div>
+</section>
+
+<section class="block" id="board">
+  <div class="wrap">
+    <h2>Leaderboard</h2>
+    <nav class="tabs" id="btabs"></nav>
+    <div class="bubble"><ol id="lb"></ol><p id="mode" style="font-size:.9rem;margin-top:10px;font-weight:500"></p></div>
   </div>
-  <div class="after" id="after"></div>
-  <p class="note" id="note"></p>
 </section>
 
 <section class="block" id="submit">
@@ -139,6 +172,7 @@ footer{padding:30px 0 50px;text-align:center;opacity:.75;font-weight:700}
 
 <script>
 /* ===== EDIT ME ===== */
+const API_URL = ""; /* paste your Apps Script web app URL for a shared live leaderboard */
 const HANDLE = "@ogadigz";
 const LINKS = { Instagram: "", TikTok: "", X: "", Discord: "" }; /* paste full URLs, e.g. https://instagram.com/ogadigz */
 const ICONS = {
@@ -164,68 +198,145 @@ const QUESTIONS = [
 ];
 /* ==================== */
 
-const $ = id => document.getElementById(id);
-const store = { get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}} };
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const shuf=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(p=>p[1]);
+const stage=$("stage"), show=(...n)=>stage.replaceChildren(...n);
+const QUIZ=[["Which company made Mario famous?",["Nintendo","Sony","Sega","Microsoft"],0],["How many players per side are on the pitch in football?",["9","10","11","12"],2],["What does GOAT stand for?",["Greatest Of All Time","Good On All Terrain","Get Off And Talk","Great Old Awesome Tale"],0],["Which app is known for the For You page?",["TikTok","Facebook","LinkedIn","Pinterest"],0],["How many sides does a standard dice have?",["4","6","8","12"],1],["What is the capital of Nigeria?",["Lagos","Abuja","Kano","Ibadan"],1],["Blue mixed with yellow makes?",["Green","Orange","Purple","Brown"],0],["Which planet is the Red Planet?",["Venus","Mars","Jupiter","Mercury"],1],["In Minecraft, which mob explodes near you?",["Creeper","Zombie","Skeleton","Spider"],0],["How many letters are in the English alphabet?",["24","25","26","27"],2]];
+const EMOJI=[["🦁👑","lion king"],["🧊👸","frozen"],["🕷️👨","spiderman"],["🚢🧊💔","titanic"],["🐠🔍","finding nemo"],["👻🚫📞","ghostbusters"],["⚡👓🧙","harry potter"],["🦈🌊","jaws"],["🚗💨😡","fast and furious"],["🦇👨","batman"]];
+const HOT=[["Pineapple belongs on pizza",8],["Voice notes beat texting",6],["Leaving people on read is rude",7],["Cereal is a soup",9],["A hot dog is a sandwich",8],["Breakfast is the best meal of the day",3],["Phones should be banned at dinner",5],["Sleeping in beats waking up early",2]];
+const WORDS=["gaming","meme","pixel","streak","trophy","controller","viral","emoji","leaderboard","quiz","comment","follower","player","level","score"];
+const WORDS5=["games","pixel","score","level","boost","quest","prize","viral","stack","reply","drama","trend","clout","media","hyper"];
+const CROSS=[["1A",0,0,"Main character energy in every game","HERO"],["1C",2,0,"Football game on every console","FIFA"],["1E",4,0,"Dies right when the game gets good","WIFI"],["1G",6,0,"Test of knowledge, you are playing one now","QUIZ"],["4B",1,3,"What this whole page is about","GAME"],["4D",3,3,"Roll it and hope for a six","DICE"],["4F",5,3,"Greatest Of All Time, has horns in memes","GOAT"]];
 
-let order = QUESTIONS.map((_,i)=>i).sort(()=>Math.random()-.5);
-let pos = 0, answered = store.get("ogd_answered",0), locked = false;
+/* daily streak, stored on this device */
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const dayDiff=(a,b)=>Math.round((new Date(b+"T00:00")-new Date(a+"T00:00"))/864e5);
+let st=store.get("ogd_streak",{count:0,best:0,last:""});
+function showStreak(){const l=st.last&&dayDiff(st.last,today())<=1?st.count:0;const e=$("streak");e.hidden=!l;if(l)e.textContent="STREAK: "+l+" DAY"+(l>1?"S":"")+" | BEST "+st.best}
+function bumpStreak(){const t=today();if(st.last===t)return;st.count=(st.last&&dayDiff(st.last,t)===1)?st.count+1:1;st.last=t;st.best=Math.max(st.best,st.count);store.set("ogd_streak",st);showStreak()}
 
-function render(){
-  const [kind,a,b] = QUESTIONS[order[pos]];
-  locked = false;
-  $("kind").textContent = kind;
-  $("qtext").textContent = kind === "This or that" ? "This or that?" : "Would you rather...";
-  const A = $("optA"), B = $("optB");
-  [A,B].forEach(el=>{el.disabled=false;el.className="opt "+(el===A?"a":"b")});
-  A.textContent = a; B.textContent = b;
-  $("after").innerHTML = ""; $("note").textContent = "";
-  $("count").textContent = answered ? "You have answered " + answered : "Tap one to play";
+let tm;
+function clock(sec,tick,fin){clearInterval(tm);let t=sec;tick(t);tm=setInterval(()=>{t--;tick(t);if(t<=0){clearInterval(tm);fin()}},1000);return()=>t}
+
+/* leaderboard: shared through Apps Script when API_URL is set, otherwise this device only */
+let bg="all",lastLoad=0;
+async function submit(n,g,s){
+  const l=store.get("ogd_scores",[]);l.push({n,g,s});store.set("ogd_scores",l.slice(-200));
+  if(API_URL){try{await fetch(API_URL,{method:"POST",mode:"no-cors",body:JSON.stringify({name:n,game:g,score:s})})}catch(e){}}
+  loadBoard(true);
+}
+async function loadBoard(force){
+  if(API_URL&&(force||!lastLoad||Date.now()-lastLoad>60000)){
+    try{const r=await(await fetch(API_URL)).json();store.set("ogd_remote",r.map(x=>({n:String(x.n),g:x.g,s:Number(x.s)})));lastLoad=Date.now()}catch(e){}
+  }
+  const rows=[...store.get("ogd_remote",[]),...store.get("ogd_scores",[])],best={};
+  rows.forEach(r=>{if(bg!=="all"&&r.g!==bg)return;const k=r.n.toLowerCase();best[k]=best[k]||{n:r.n,g:{}};best[k].g[r.g]=Math.max(best[k].g[r.g]||0,r.s)});
+  const list=Object.values(best).map(p=>({n:p.n,s:Object.values(p.g).reduce((a,b)=>a+b,0)})).sort((a,b)=>b.s-a.s).slice(0,10);
+  $("lb").replaceChildren(...(list.length?list.map(p=>{const li=el("li");li.append(el("b","",p.n),el("span","",p.s+" pts"));return li}):[el("li","","No scores yet. Be the first.")]));
+  $("mode").textContent=API_URL?"Shared leaderboard from all devices. Best score per game, added up. Refreshes automatically.":"This device only. Connect the Apps Script to share scores between devices.";
+}
+setInterval(()=>{if(!document.hidden)loadBoard()},120000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadBoard()});
+
+function end(g,score,line){
+  clearInterval(tm);bumpStreak();
+  const bs=store.get("ogd_best",{});if(score>(bs[g]||0)){bs[g]=score;store.set("ogd_best",bs)}
+  const box=el("div","res"),nm=el("input","in");nm.placeholder="Your name";nm.maxLength=16;nm.value=store.get("ogd_name","");
+  const sv=el("button","btn go","Post to leaderboard"),again=el("button","btn","Play again"),af=el("div","after");
+  sv.onclick=()=>{const n=nm.value.trim();if(!n){nm.focus();return}store.set("ogd_name",n);submit(n,g,score);sv.disabled=true;sv.textContent="Posted"};
+  again.onclick=()=>setGame(g);af.append(sv,again);
+  box.append(el("div","big",score+" pts"),el("p","",line||""),nm,af);show(box);
 }
 
-function choose(side){
-  if(locked) return; locked = true;
-  const A = $("optA"), B = $("optB");
-  const win = side==="A"?A:B, lose = side==="A"?B:A;
-  A.disabled = B.disabled = true;
-  win.classList.add("won"); lose.classList.add("lost");
-  const s = document.createElement("span"); s.className="pick"; s.textContent="YOUR PICK"; win.appendChild(s);
-  answered++; store.set("ogd_answered",answered);
-  $("count").textContent = "You have answered " + answered;
-  const next = document.createElement("button"); next.className="btn go"; next.type="button"; next.textContent="Next question";
-  next.onclick = () => { pos = (pos+1) % order.length; if(pos===0) order.sort(()=>Math.random()-.5); render(); $("optA").focus(); };
-  const share = document.createElement("button"); share.className="btn"; share.type="button"; share.textContent="Share this";
-  share.onclick = () => shareIt(side);
-  $("after").append(next, share);
-  next.focus();
+/* games */
+let wq=shuf(QUESTIONS.map((_,i)=>i)),wp=0;
+function wyr(){
+  const [kind,a,b]=QUESTIONS[wq[wp%wq.length]];
+  const A=el("button","opt a",a),B=el("button","opt b",b),af=el("div","after"),ops=el("div","opts");
+  const pick=(w,l,mine)=>{A.disabled=B.disabled=true;w.classList.add("won");l.classList.add("lost");w.append(el("span","pick","YOUR PICK"));bumpStreak();
+    const n=el("button","btn go","Next question"),sh=el("button","btn","Share this");n.onclick=()=>{wp++;wyr()};
+    sh.onclick=async()=>{const t=(kind==="This or that"?"This or that: "+a+" or "+b:"Would you rather "+a+" or "+b)+"? I picked: "+mine+". What about you? "+HANDLE;try{if(navigator.share)await navigator.share({text:t});else{await navigator.clipboard.writeText(t);sh.textContent="Copied"}}catch(e){}};
+    af.append(n,sh);n.focus()};
+  A.onclick=()=>pick(A,B,a);B.onclick=()=>pick(B,A,b);ops.append(A,B);
+  show(el("h2","q",kind==="This or that"?"This or that?":"Would you rather..."),ops,af);
+}
+function quiz(){
+  const qs=shuf(QUIZ).slice(0,10);let i=0,score=0,right=0;
+  const next=()=>{
+    if(i>=qs.length)return end("quiz",score,right+" of "+qs.length+" right");
+    const [q,o,c]=qs[i],t=el("div","timer"),grid=el("div","opts sm");let done=false,left;
+    const fin=k=>{if(done)return;done=true;const s=left();clearInterval(tm);btns.forEach((b,j)=>{b.disabled=true;if(j===c)b.classList.add("won");else if(j===k)b.classList.add("lost")});if(k===c){score+=100+s*5;right++}setTimeout(()=>{i++;next()},900)};
+    const btns=o.map((x,j)=>{const b=el("button","opt "+(j%2?"b":"a"),x);b.onclick=()=>fin(j);return b});
+    grid.append(...btns);show(el("p","count","Question "+(i+1)+" of "+qs.length+" | "+score+" pts"),t,el("h2","q",q),grid);
+    left=clock(15,s=>t.textContent=s+"s",()=>fin(-1));
+  };next();
+}
+function emoji(){
+  const rs=shuf(EMOJI).slice(0,6);let i=0,score=0;const norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,"");
+  const next=()=>{
+    if(i>=rs.length)return end("emoji",score,"Guess the movie from the emojis");
+    const [e,a]=rs[i],inp=el("input","in"),msg=el("p","note"),go=el("button","btn go","Guess"),sk=el("button","btn","Skip"),af=el("div","after");let tries=0;
+    const chk=()=>{if(norm(inp.value)===norm(a)){score+=Math.max(40,100-tries*30);i++;next()}else{tries++;msg.textContent=tries>=3?"Hint: "+a.length+" characters, starts with "+a[0].toUpperCase():"Nope. Try again";inp.select()}};
+    go.onclick=chk;inp.onkeydown=ev=>{if(ev.key==="Enter")chk()};sk.onclick=()=>{i++;next()};inp.placeholder="Which movie?";inp.autocomplete="off";af.append(go,sk);
+    show(el("p","count","Round "+(i+1)+" of "+rs.length+" | "+score+" pts"),el("div","emo",e),inp,af,msg);inp.focus();
+  };next();
+}
+function hot(){
+  const ts=shuf(HOT).slice(0,6);let i=0,score=0;
+  const next=()=>{
+    if(i>=ts.length)return end("hot",score,"How close you were to ogadigz's verdicts");
+    const [t,v]=ts[i],r=el("input","rng"),val=el("div","big","5"),lock=el("button","btn go","Lock it in"),out=el("p","note"),af=el("div","after");
+    r.type="range";r.min=1;r.max=10;r.value=5;r.oninput=()=>val.textContent=r.value;af.append(lock);
+    lock.onclick=()=>{const p=Math.max(0,100-Math.abs(r.value-v)*25);score+=p;r.disabled=lock.disabled=true;out.textContent="ogadigz says "+v+" out of 10. You earned "+p+" pts.";const n=el("button","btn","Next");n.onclick=()=>{i++;next()};af.append(n);n.focus()};
+    show(el("p","count","Take "+(i+1)+" of "+ts.length+" | "+score+" pts"),el("h2","q",t),el("p","note","How spicy is this take? 1 is mild, 10 is nuclear."),val,r,af,out);
+  };next();
+}
+function scramble(){
+  let score=0,solved=0,w,i=0;const ws=shuf(WORDS),t=el("div","timer"),tile=el("div","emo"),inp=el("input","in"),msg=el("p","note"),sk=el("button","btn","Skip"),af=el("div","after");
+  const nw=()=>{w=ws[i++%ws.length];let s;do{s=shuf(w.split("")).join("")}while(s===w);tile.textContent=s.toUpperCase();inp.value="";inp.focus()};
+  const chk=()=>{if(inp.value.trim().toLowerCase()===w){score+=w.length*20;solved++;msg.textContent="Yes! +"+w.length*20;nw()}else msg.textContent="Not quite"};
+  inp.onkeydown=e=>{if(e.key==="Enter")chk()};sk.onclick=nw;inp.placeholder="Unscramble it";inp.autocomplete="off";af.append(sk);
+  show(t,tile,inp,af,msg);nw();clock(60,s=>t.textContent=s+"s",()=>end("scramble",score,solved+" words solved in 60 seconds"));
+}
+function word(){
+  const ans=WORDS5[Math.max(0,dayDiff("2026-01-01",today()))%WORDS5.length],rows=[],g=el("div","wg"),inp=el("input","in"),msg=el("p","note","Same word for everyone today. 6 tries."),go=el("button","btn go","Guess"),af=el("div","after");
+  const paint=()=>g.replaceChildren(...rows.map(r=>{const d=el("div","wr");[...r].forEach((c,k)=>d.append(el("span","wc "+(c===ans[k]?"ok":ans.includes(c)?"mv":"no"),c.toUpperCase())));return d}));
+  const chk=()=>{const v=inp.value.toLowerCase();if(!/^[a-z]{5}$/.test(v)){msg.textContent="Five letters please";return}rows.push(v);inp.value="";paint();
+    if(v===ans)end("word",(7-rows.length)*100,"Solved in "+rows.length+" tries");else if(rows.length>=6)end("word",0,"The word was "+ans.toUpperCase())};
+  go.onclick=chk;inp.onkeydown=e=>{if(e.key==="Enter")chk()};inp.maxLength=5;inp.placeholder="5-letter word";af.append(go);
+  show(g,inp,af,msg);inp.focus();
+}
+function cross(){
+  const cells={},grid=el("div","cg"),list=el("div"),got=new Set();
+  for(let r=-1;r<7;r++)for(let c=-1;c<7;c++){const x=el("div",r<0||c<0?"cl":"cc",r<0&&c>=0?"ABCDEFG"[c]:(c<0&&r>=0?r+1:""));if(r>=0&&c>=0)cells[r+","+c]=x;grid.append(x)}
+  CROSS.forEach(([id,c,r0,clue,a])=>{[...a].forEach((_,k)=>cells[(r0+k)+","+c].classList.add("on"));
+    const row=el("div","crow"),inp=el("input");inp.maxLength=4;inp.placeholder="????";inp.setAttribute("aria-label",id+" answer");
+    inp.onkeydown=e=>{if(e.key!=="Enter")return;if(inp.value.trim().toUpperCase()===a){[...a].forEach((ch,k)=>cells[(r0+k)+","+c].textContent=ch);inp.disabled=true;got.add(id);if(got.size===CROSS.length)setTimeout(()=>end("cross",700,"Row 4 spells OGADIGZ"),900)}else inp.select()};
+    row.append(el("b","",id),el("span","",clue),inp);list.append(row)});
+  for(let c=0;c<7;c++)cells["3,"+c].classList.add("mys");
+  show(el("p","count","Type the answer and press Enter. Row 4 is the mystery row."),grid,list);
 }
 
-async function shareIt(side){
-  const [kind,a,b] = QUESTIONS[order[pos]];
-  const mine = side==="A"?a:b;
-  const text = (kind==="This or that" ? "This or that: " + a + " or " + b : "Would you rather " + a + " or " + b) + "? I picked: " + mine + ". What about you? " + HANDLE;
-  try{
-    if(navigator.share){ await navigator.share({text}); return; }
-    await navigator.clipboard.writeText(text);
-    $("note").textContent = "Copied. Paste it into your group chat.";
-  }catch(e){ $("note").textContent = text; }
+const GAMES={wyr:["Would You Rather",wyr],quiz:["Quick Quiz",quiz],emoji:["Emoji Guess",emoji],hot:["Hot Take Meter",hot],scramble:["Word Scramble",scramble],word:["Daily Word",word],cross:["Daily Crossword",cross]};
+function setGame(g){
+  clearInterval(tm);$("gbtn").textContent=GAMES[g][0]+" \u25BE";const b=store.get("ogd_best",{})[g];$("count").textContent=b?"Best: "+b+" pts":"";
+  [...$("gmenu").children].forEach(t=>t.classList.toggle("on",t.dataset.g===g));showStreak();GAMES[g][1]();
 }
+const mk=(box,id,label,fn)=>{const b=el("button","tab",label);b.type="button";b.dataset.g=id;b.onclick=fn;box.append(b)};
+const gm=$("gmenu"),gb=$("gbtn"),menu=o=>{gm.hidden=!o;gb.setAttribute("aria-expanded",o)};
+Object.entries(GAMES).forEach(([id,[n]])=>mk(gm,id,n,()=>{setGame(id);menu(false)}));
+gb.onclick=()=>menu(gm.hidden);
+document.addEventListener("click",e=>{if(!e.target.closest(".gpick"))menu(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")menu(false)});
+[["all","All games"],...Object.entries(GAMES).filter(([k])=>k!=="wyr").map(([k,v])=>[k,v[0]])].forEach(([id,n])=>mk($("btabs"),id,n,()=>{bg=id;[...$("btabs").children].forEach(t=>t.classList.toggle("on",t.dataset.g===id));loadBoard()}));
+$("btabs").firstChild.classList.add("on");
 
-$("optA").onclick = () => choose("A");
-$("optB").onclick = () => choose("B");
-$("handle").textContent = HANDLE;
-
-const linksEl = $("links");
-Object.entries(LINKS).forEach(([name,url])=>{
-  const a = document.createElement("a");
-  a.href = url || "#";
-  if(url){ a.target = "_blank"; a.rel = "noopener"; }
-  else { a.addEventListener("click", e => e.preventDefault()); a.title = "Link coming soon"; }
-  a.setAttribute("aria-label", name);
-  a.innerHTML = ICONS[name] + "<span>" + name + "</span>";
-  linksEl.appendChild(a);
-});
-
-render();
+$("handle").textContent=HANDLE;
+const linksEl=$("links");
+Object.entries(LINKS).forEach(([name,url])=>{const a=document.createElement("a");a.href=url||"#";if(url){a.target="_blank";a.rel="noopener"}else{a.addEventListener("click",e=>e.preventDefault());a.title="Link coming soon"}a.setAttribute("aria-label",name);a.innerHTML=ICONS[name]+"<span>"+name+"</span>";linksEl.appendChild(a)});
+setGame("wyr");loadBoard();
 </script>
 </body>
 </html>
